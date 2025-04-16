@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <title>Web-brauzerlar haqida savol-javob</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 30px; background: #f0f8ff; }
+    .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.1); max-width: 600px; margin: auto; }
+    h1 { text-align: center; color: #2a4d69; }
+    .question { font-size: 20px; margin-bottom: 20px; }
+    .answers button { display: block; width: 100%; margin: 10px 0; padding: 10px; font-size: 16px; border: none; border-radius: 8px; cursor: pointer; background: #e0e0e0; }
+    .answers button:hover { background: #d6f5d6; }
+    .feedback { font-size: 18px; margin-top: 20px; font-weight: bold; }
+    .next { margin-top: 20px; padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 8px; cursor: pointer; display: none; }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>🧠 Web-brauzerlar haqida savol-javob</h1>
+    <div class="question" id="question"></div>
+    <div class="answers" id="answers"></div>
+    <div class="feedback" id="feedback"></div>
+    <button class="next" id="nextBtn" onclick="nextQuestion()">Keyingi savol</button>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        question: "Veb-brauzerning asosiy vazifasi nima?",
+        answers: ["Sayt yaratish", "Veb-saytlarni ko‘rsatish", "Rasm chizish", "Matn yozish"],
+        correct: 1,
+        explanation: "✅ To‘g‘ri! Brauzerlar veb-sahifalarni ko‘rsatish uchun xizmat qiladi."
+      },
+      {
+        question: "Google Chrome qachon chiqarilgan?",
+        answers: ["2000-yil", "2008-yil", "2012-yil", "2015-yil"],
+        correct: 1,
+        explanation: "✅ To‘g‘ri! Google Chrome 2008-yilda chiqarilgan."
+      },
+      {
+        question: "Qaysi brauzer Apple kompaniyasiga tegishli?",
+        answers: ["Safari", "Opera", "Firefox", "Edge"],
+        correct: 0,
+        explanation: "✅ Ha! Safari brauzeri Apple qurilmalari uchun mo‘ljallangan."
+      },
+      {
+        question: "Inkognito rejimi nima qiladi?",
+        answers: ["Reklama bloklaydi", "Tarixni saqlamaydi", "Tezroq yuklaydi", "Internetni o‘chiradi"],
+        correct: 1,
+        explanation: "✅ To‘g‘ri! Inkognito rejimida kirilgan sahifalar tarixda saqlanmaydi."
+      },
+      {
+        question: "Opera brauzerining mashhur xususiyati qaysi?",
+        answers: ["Turbo rejimi", "YouTube tezligi", "Video tahrirlash", "Excel qo‘llab-quvvatlash"],
+        correct: 0,
+        explanation: "✅ To‘g‘ri! Turbo rejimi bilan Opera tarmoqlar sekin bo‘lsa ham tezroq ishlaydi."
+      }
+    ];
+
+    let current = 0;
+
+    function loadQuestion() {
+      const q = quizData[current];
+      document.getElementById("question").textContent = `${current + 1}. ${q.question}`;
+      const answersDiv = document.getElementById("answers");
+      answersDiv.innerHTML = "";
+      q.answers.forEach((answer, i) => {
+        const btn = document.createElement("button");
+        btn.textContent = answer;
+        btn.onclick = () => checkAnswer(i);
+        answersDiv.appendChild(btn);
+      });
+      document.getElementById("feedback").textContent = "";
+      document.getElementById("nextBtn").style.display = "none";
+    }
+
+    function checkAnswer(selected) {
+      const q = quizData[current];
+      const feedback = document.getElementById("feedback");
+      if (selected === q.correct) {
+        feedback.textContent = q.explanation;
+        feedback.style.color = "green";
+      } else {
+        feedback.textContent = `❌ Noto‘g‘ri! To‘g‘ri javob: "${q.answers[q.correct]}".`;
+        feedback.style.color = "red";
+      }
+      document.getElementById("nextBtn").style.display = "inline-block";
+      const buttons = document.querySelectorAll(".answers button");
+      buttons.forEach(btn => btn.disabled = true);
+    }
+
+    function nextQuestion() {
+      current++;
+      if (current < quizData.length) {
+        loadQuestion();
+      } else {
+        document.querySelector(".card").innerHTML = `<h2>🎉 Tabriklaymiz!</h2><p>Test yakunlandi. Siz ${quizData.length} ta savolni bajardingiz.</p>`;
+      }
+    }
+
+    // Start the quiz
+    loadQuestion();
+  </script>
+
+</body>
+</html>
